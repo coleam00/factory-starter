@@ -6,3 +6,4 @@ data/
 .venv/
 .env
 .factory-env
+uv.lock
