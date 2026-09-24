@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+data/
+*.sqlite
+*.sqlite-journal
+.venv/
+.env
+.factory-env

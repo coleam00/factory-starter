@@ -1,0 +1,6 @@
+[project]
+name = "factory-starter"
+version = "0.1.0"
+description = "A tiny stdlib-only web app for an AI software factory to build on"
+requires-python = ">=3.10"
+dependencies = []

@@ -1,0 +1,37 @@
+:root {
+  --bg: #0b1020; --panel: #121a30; --line: #243150; --text: #e6ebf5;
+  --muted: #93a0bd; --accent: #3b82f6; --ok: #22c55e; --warn: #f59e0b; --bad: #ef4444;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+a { color: var(--accent); }
+.top { display: flex; gap: 24px; align-items: center; padding: 14px 24px;
+  border-bottom: 1px solid var(--line); background: var(--panel); }
+.brand { font-weight: 700; letter-spacing: .02em; }
+.top nav { display: flex; gap: 16px; flex-wrap: wrap; }
+.top nav a { color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--text); }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.8rem; margin: .2em 0 .4em; }
+.hero p, .muted { color: var(--muted); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 16px; margin: 12px 0; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: .9rem; }
+form { display: grid; gap: 10px; max-width: 520px; }
+label { display: grid; gap: 4px; font-size: .95rem; }
+input, select, textarea { background: #0e1528; color: var(--text); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 10px; font: inherit; }
+button, .button { background: var(--accent); color: white; border: 0; border-radius: 8px;
+  padding: 9px 14px; font: inherit; cursor: pointer; text-decoration: none; display: inline-block; }
+button.secondary { background: transparent; border: 1px solid var(--line); color: var(--text); }
+.flash { background: #13233f; border: 1px solid var(--accent); padding: 10px 12px; border-radius: 8px; }
+.error { color: var(--bad); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .8rem;
+  border: 1px solid var(--line); color: var(--muted); }
+.badge.ok { color: var(--ok); border-color: var(--ok); }
+.badge.warn { color: var(--warn); border-color: var(--warn); }
+.badge.bad { color: var(--bad); border-color: var(--bad); }
