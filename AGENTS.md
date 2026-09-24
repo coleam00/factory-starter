@@ -57,8 +57,14 @@ def list_things(req: Request) -> Response:
 - **Parameterized SQL only** (`?` placeholders). Never format values into SQL.
 - **POST forms answer `redirect()` (303)** on success. On a validation error,
   re-render the form with a 400 status and an `.error` message. Never a 500.
-- **Every route gets a test** in `tests/test_<feature>.py` using `AppTestCase`,
-  covering the happy path and at least one invalid input.
+- **Every route gets a test** in `tests/test_<feature>.py` using `AppTestCase`.
+  Write one test per acceptance criterion AND per branch: happy path, each invalid
+  input, unknown id, non-numeric id, and wrong or missing token all get their own
+  test. For forms, assert on the rendered HTML (inputs, hidden fields, error text),
+  not only on the POST.
+- **No copy-paste between routes.** When two routes in a module share logic (an
+  authorization check, a write to the same table, a lookup), put it in one private
+  helper that every route calls. Security checks especially have exactly one home.
 - **`/health` and `/build-id` keep working.** The factory verifies against them.
 - Close every connection you open (`try/finally`).
 - Keep one concern per change. A feature ticket touches its own module, its own
