@@ -1,0 +1,6 @@
+{
+  "static": "python3 -m compileall -q app tests",
+  "unit": "python3 -m unittest discover -s tests",
+  "unit_count_pattern": "Ran (\\d+) test",
+  "description": "Ordinary project checks only. Configure real commands. Runtime environment and scenarios are separate inputs."
+}

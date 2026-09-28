@@ -3,7 +3,12 @@
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [ { "type": "command", "command": "python .claude/hooks/block_agent_merge.py" } ]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec \"$(command -v python3 || command -v python)\" .claude/hooks/block_agent_merge.py"
+          }
+        ]
       }
     ]
   }
