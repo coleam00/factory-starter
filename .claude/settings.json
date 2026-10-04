@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "exec \"$(command -v python3 || command -v python)\" .claude/hooks/block_agent_merge.py"
+            "command": "exec \"$(command -v python3 || command -v python)\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_agent_merge.py\""
           }
         ]
       }
