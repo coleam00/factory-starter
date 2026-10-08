@@ -9,4 +9,4 @@ python -m unittest discover -s tests
 ```
 
 Set `APP_NAME` to name your app. Features live in `app/features/`, one module each.
-`AGENTS.md` has the conventions every agent (and person) follows.
+`engineering.md` has the conventions every agent (and person) follows.
