@@ -85,20 +85,11 @@ class Handler(BaseHTTPRequestHandler):
     server_version = "starter"
 
     def _dispatch(self) -> None:
-        length = int(self.headers.get("Content-Length") or 0)
-        body = self.rfile.read(length) if length else b""
-        req = Request.build(self.command, self.path, dict(self.headers), body)
-        handler, params, path_known = resolve(req.method, req.path)
-        if handler is None:
-            resp = text_response("method not allowed", 405) if path_known else html_response(
-                page("Not found", "<h1>Not found</h1>"), 404)
-        else:
-            req.params = params
-            try:
-                resp = handler(req)
-            except Exception:  # noqa: BLE001 - a crash must answer 500, never hang
-                traceback.print_exc()
-                resp = text_response("internal error", 500)
+        try:
+            resp = self._respond()
+        except Exception:  # noqa: BLE001 - a crash must answer 500, never hang
+            traceback.print_exc()
+            resp = text_response("internal error", 500)
         self.send_response(resp.status)
         for key, value in resp.headers.items():
             self.send_header(key, value)
@@ -106,6 +97,22 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(resp.body)
+
+    def _respond(self) -> Response:
+        raw_length = self.headers.get("Content-Length") or "0"
+        if not raw_length.strip().isdigit():
+            # The body cannot be framed, so the connection cannot be reused either.
+            self.close_connection = True
+            return text_response("bad Content-Length", 400)
+        length = int(raw_length)
+        body = self.rfile.read(length) if length else b""
+        req = Request.build(self.command, self.path, dict(self.headers), body)
+        handler, params, path_known = resolve(req.method, req.path)
+        if handler is None:
+            return text_response("method not allowed", 405) if path_known else html_response(
+                page("Not found", "<h1>Not found</h1>"), 404)
+        req.params = params
+        return handler(req)
 
     do_GET = do_POST = do_PUT = do_PATCH = do_DELETE = _dispatch
 

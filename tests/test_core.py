@@ -1,6 +1,8 @@
 import os
+import socket
 import sqlite3
 import unittest
+from urllib.parse import urlparse
 
 from app import db
 from tests.support import AppTestCase
@@ -36,6 +38,26 @@ class CoreRoutesTest(AppTestCase):
         self.assertEqual(self.get("/static/style.css")[0], 200)
         self.assertEqual(self.get("/static/..%2Fserver.py")[0], 404)
 
+
+    def raw(self, request: bytes) -> bytes:
+        """Send bytes no well-behaved client would, and return whatever comes back."""
+        url = urlparse(self.base)
+        with socket.create_connection((url.hostname, url.port), timeout=5) as conn:
+            conn.sendall(request)
+            chunks = []
+            while chunk := conn.recv(4096):
+                chunks.append(chunk)
+        return b"".join(chunks)
+
+    def test_a_malformed_content_length_is_answered_400(self):
+        for value in (b"abc", b"-5"):
+            head = [b"POST /health HTTP/1.1", b"Host: x", b"Content-Length: " + value,
+                    b"Connection: close", b"", b""]
+            reply = self.raw(bytes([13, 10]).join(head))
+            self.assertTrue(reply.startswith(b"HTTP/1.0 400") or reply.startswith(b"HTTP/1.1 400"),
+                            (value, reply[:80]))
+        # The server keeps answering afterwards.
+        self.assertEqual(self.get("/health")[0], 200)
 
 class MigrationTest(unittest.TestCase):
     def test_migrations_apply_once_by_name(self):
